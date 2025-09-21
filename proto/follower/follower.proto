@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package follower;                         // opciono, ali preporučeno
+option go_package = "database-example/proto/follower;followerpb";
+
+import "google/protobuf/empty.proto";
+
+service FollowerService {
+  rpc Ping   (PingRequest)   returns (PingResponse);
+  rpc Follow (FollowRequest) returns (google.protobuf.Empty);
+}
+
+message PingRequest {}
+message PingResponse { string message = 1; }
+
+message FollowRequest {
+  string follower_id = 1;  // ID onog ko prati
+  string followee_id = 2;  // ID onog koga prati
+}
