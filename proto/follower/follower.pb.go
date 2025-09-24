@@ -154,6 +154,310 @@ func (x *FollowRequest) GetFolloweeId() string {
 	return ""
 }
 
+type UnfollowRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	FolloweeId    string                 `protobuf:"bytes,1,opt,name=followee_id,json=followeeId,proto3" json:"followee_id,omitempty"`
+	FollowerId    string                 `protobuf:"bytes,2,opt,name=follower_id,json=followerId,proto3" json:"follower_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UnfollowRequest) Reset() {
+	*x = UnfollowRequest{}
+	mi := &file_proto_follower_follower_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UnfollowRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UnfollowRequest) ProtoMessage() {}
+
+func (x *UnfollowRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_follower_follower_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UnfollowRequest.ProtoReflect.Descriptor instead.
+func (*UnfollowRequest) Descriptor() ([]byte, []int) {
+	return file_proto_follower_follower_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *UnfollowRequest) GetFolloweeId() string {
+	if x != nil {
+		return x.FolloweeId
+	}
+	return ""
+}
+
+func (x *UnfollowRequest) GetFollowerId() string {
+	if x != nil {
+		return x.FollowerId
+	}
+	return ""
+}
+
+type GetRecommendationsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"` // iz JWT-a ili eksplicitno
+	Limit         int32                  `protobuf:"varint,2,opt,name=limit,proto3" json:"limit,omitempty"`                // default npr. 10
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetRecommendationsRequest) Reset() {
+	*x = GetRecommendationsRequest{}
+	mi := &file_proto_follower_follower_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetRecommendationsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetRecommendationsRequest) ProtoMessage() {}
+
+func (x *GetRecommendationsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_follower_follower_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetRecommendationsRequest.ProtoReflect.Descriptor instead.
+func (*GetRecommendationsRequest) Descriptor() ([]byte, []int) {
+	return file_proto_follower_follower_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *GetRecommendationsRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *GetRecommendationsRequest) GetLimit() int32 {
+	if x != nil {
+		return x.Limit
+	}
+	return 0
+}
+
+type Recommendation struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Mutual        int64                  `protobuf:"varint,2,opt,name=mutual,proto3" json:"mutual,omitempty"` // koliko tvojih prati kandidata
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Recommendation) Reset() {
+	*x = Recommendation{}
+	mi := &file_proto_follower_follower_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Recommendation) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Recommendation) ProtoMessage() {}
+
+func (x *Recommendation) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_follower_follower_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Recommendation.ProtoReflect.Descriptor instead.
+func (*Recommendation) Descriptor() ([]byte, []int) {
+	return file_proto_follower_follower_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *Recommendation) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *Recommendation) GetMutual() int64 {
+	if x != nil {
+		return x.Mutual
+	}
+	return 0
+}
+
+type GetRecommendationsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Items         []*Recommendation      `protobuf:"bytes,1,rep,name=items,proto3" json:"items,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetRecommendationsResponse) Reset() {
+	*x = GetRecommendationsResponse{}
+	mi := &file_proto_follower_follower_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetRecommendationsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetRecommendationsResponse) ProtoMessage() {}
+
+func (x *GetRecommendationsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_follower_follower_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetRecommendationsResponse.ProtoReflect.Descriptor instead.
+func (*GetRecommendationsResponse) Descriptor() ([]byte, []int) {
+	return file_proto_follower_follower_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *GetRecommendationsResponse) GetItems() []*Recommendation {
+	if x != nil {
+		return x.Items
+	}
+	return nil
+}
+
+type GetFolloweesRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"` // koga pratimo (iz JWT-a ili eksplicitno)
+	Skip          int32                  `protobuf:"varint,2,opt,name=skip,proto3" json:"skip,omitempty"`                  // opcionalna paginacija
+	Limit         int32                  `protobuf:"varint,3,opt,name=limit,proto3" json:"limit,omitempty"`                // default 20
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetFolloweesRequest) Reset() {
+	*x = GetFolloweesRequest{}
+	mi := &file_proto_follower_follower_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetFolloweesRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetFolloweesRequest) ProtoMessage() {}
+
+func (x *GetFolloweesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_follower_follower_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetFolloweesRequest.ProtoReflect.Descriptor instead.
+func (*GetFolloweesRequest) Descriptor() ([]byte, []int) {
+	return file_proto_follower_follower_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *GetFolloweesRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *GetFolloweesRequest) GetSkip() int32 {
+	if x != nil {
+		return x.Skip
+	}
+	return 0
+}
+
+func (x *GetFolloweesRequest) GetLimit() int32 {
+	if x != nil {
+		return x.Limit
+	}
+	return 0
+}
+
+type GetFolloweesResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserIds       []string               `protobuf:"bytes,1,rep,name=user_ids,json=userIds,proto3" json:"user_ids,omitempty"` // lista ID-jeva koje user prati
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetFolloweesResponse) Reset() {
+	*x = GetFolloweesResponse{}
+	mi := &file_proto_follower_follower_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetFolloweesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetFolloweesResponse) ProtoMessage() {}
+
+func (x *GetFolloweesResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_follower_follower_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetFolloweesResponse.ProtoReflect.Descriptor instead.
+func (*GetFolloweesResponse) Descriptor() ([]byte, []int) {
+	return file_proto_follower_follower_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *GetFolloweesResponse) GetUserIds() []string {
+	if x != nil {
+		return x.UserIds
+	}
+	return nil
+}
+
 var File_proto_follower_follower_proto protoreflect.FileDescriptor
 
 const file_proto_follower_follower_proto_rawDesc = "" +
@@ -166,10 +470,32 @@ const file_proto_follower_follower_proto_rawDesc = "" +
 	"\vfollower_id\x18\x01 \x01(\tR\n" +
 	"followerId\x12\x1f\n" +
 	"\vfollowee_id\x18\x02 \x01(\tR\n" +
-	"followeeId2\x83\x01\n" +
+	"followeeId\"S\n" +
+	"\x0fUnfollowRequest\x12\x1f\n" +
+	"\vfollowee_id\x18\x01 \x01(\tR\n" +
+	"followeeId\x12\x1f\n" +
+	"\vfollower_id\x18\x02 \x01(\tR\n" +
+	"followerId\"J\n" +
+	"\x19GetRecommendationsRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x14\n" +
+	"\x05limit\x18\x02 \x01(\x05R\x05limit\"A\n" +
+	"\x0eRecommendation\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x16\n" +
+	"\x06mutual\x18\x02 \x01(\x03R\x06mutual\"L\n" +
+	"\x1aGetRecommendationsResponse\x12.\n" +
+	"\x05items\x18\x01 \x03(\v2\x18.follower.RecommendationR\x05items\"X\n" +
+	"\x13GetFolloweesRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x12\n" +
+	"\x04skip\x18\x02 \x01(\x05R\x04skip\x12\x14\n" +
+	"\x05limit\x18\x03 \x01(\x05R\x05limit\"1\n" +
+	"\x14GetFolloweesResponse\x12\x19\n" +
+	"\buser_ids\x18\x01 \x03(\tR\auserIds2\xf2\x02\n" +
 	"\x0fFollowerService\x125\n" +
 	"\x04Ping\x12\x15.follower.PingRequest\x1a\x16.follower.PingResponse\x129\n" +
-	"\x06Follow\x12\x17.follower.FollowRequest\x1a\x16.google.protobuf.EmptyB,Z*database-example/proto/follower;followerpbb\x06proto3"
+	"\x06Follow\x12\x17.follower.FollowRequest\x1a\x16.google.protobuf.Empty\x12=\n" +
+	"\bUnfollow\x12\x19.follower.UnfollowRequest\x1a\x16.google.protobuf.Empty\x12_\n" +
+	"\x12GetRecommendations\x12#.follower.GetRecommendationsRequest\x1a$.follower.GetRecommendationsResponse\x12M\n" +
+	"\fGetFollowees\x12\x1d.follower.GetFolloweesRequest\x1a\x1e.follower.GetFolloweesResponseB,Z*database-example/proto/follower;followerpbb\x06proto3"
 
 var (
 	file_proto_follower_follower_proto_rawDescOnce sync.Once
@@ -183,23 +509,36 @@ func file_proto_follower_follower_proto_rawDescGZIP() []byte {
 	return file_proto_follower_follower_proto_rawDescData
 }
 
-var file_proto_follower_follower_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_proto_follower_follower_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_proto_follower_follower_proto_goTypes = []any{
-	(*PingRequest)(nil),   // 0: follower.PingRequest
-	(*PingResponse)(nil),  // 1: follower.PingResponse
-	(*FollowRequest)(nil), // 2: follower.FollowRequest
-	(*emptypb.Empty)(nil), // 3: google.protobuf.Empty
+	(*PingRequest)(nil),                // 0: follower.PingRequest
+	(*PingResponse)(nil),               // 1: follower.PingResponse
+	(*FollowRequest)(nil),              // 2: follower.FollowRequest
+	(*UnfollowRequest)(nil),            // 3: follower.UnfollowRequest
+	(*GetRecommendationsRequest)(nil),  // 4: follower.GetRecommendationsRequest
+	(*Recommendation)(nil),             // 5: follower.Recommendation
+	(*GetRecommendationsResponse)(nil), // 6: follower.GetRecommendationsResponse
+	(*GetFolloweesRequest)(nil),        // 7: follower.GetFolloweesRequest
+	(*GetFolloweesResponse)(nil),       // 8: follower.GetFolloweesResponse
+	(*emptypb.Empty)(nil),              // 9: google.protobuf.Empty
 }
 var file_proto_follower_follower_proto_depIdxs = []int32{
-	0, // 0: follower.FollowerService.Ping:input_type -> follower.PingRequest
-	2, // 1: follower.FollowerService.Follow:input_type -> follower.FollowRequest
-	1, // 2: follower.FollowerService.Ping:output_type -> follower.PingResponse
-	3, // 3: follower.FollowerService.Follow:output_type -> google.protobuf.Empty
-	2, // [2:4] is the sub-list for method output_type
-	0, // [0:2] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	5, // 0: follower.GetRecommendationsResponse.items:type_name -> follower.Recommendation
+	0, // 1: follower.FollowerService.Ping:input_type -> follower.PingRequest
+	2, // 2: follower.FollowerService.Follow:input_type -> follower.FollowRequest
+	3, // 3: follower.FollowerService.Unfollow:input_type -> follower.UnfollowRequest
+	4, // 4: follower.FollowerService.GetRecommendations:input_type -> follower.GetRecommendationsRequest
+	7, // 5: follower.FollowerService.GetFollowees:input_type -> follower.GetFolloweesRequest
+	1, // 6: follower.FollowerService.Ping:output_type -> follower.PingResponse
+	9, // 7: follower.FollowerService.Follow:output_type -> google.protobuf.Empty
+	9, // 8: follower.FollowerService.Unfollow:output_type -> google.protobuf.Empty
+	6, // 9: follower.FollowerService.GetRecommendations:output_type -> follower.GetRecommendationsResponse
+	8, // 10: follower.FollowerService.GetFollowees:output_type -> follower.GetFolloweesResponse
+	6, // [6:11] is the sub-list for method output_type
+	1, // [1:6] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_proto_follower_follower_proto_init() }
@@ -213,7 +552,7 @@ func file_proto_follower_follower_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_follower_follower_proto_rawDesc), len(file_proto_follower_follower_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

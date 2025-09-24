@@ -2,9 +2,12 @@ package repo
 
 import (
 	"context"
+	"errors"
 	"log"
 	"os"
 	"time"
+
+	"database-example/model"
 
 	"github.com/neo4j/neo4j-go-driver/v5/neo4j"
 )
@@ -51,6 +54,10 @@ func (r *FollowerRepository) Health(ctx context.Context) error {
 	return r.driver.VerifyConnectivity(ctx)
 }
 
+var (
+	ErrNotFollowing = errors.New("follow relationship does not exist")
+)
+
 func (r *FollowerRepository) Follow(ctx context.Context, followerID, followeeID string) error {
 	session := r.driver.NewSession(ctx, neo4j.SessionConfig{AccessMode: neo4j.AccessModeWrite})
 	defer session.Close(ctx)
@@ -83,6 +90,120 @@ func (r *FollowerRepository) Follow(ctx context.Context, followerID, followeeID 
 		return nil, nil
 	})
 	return err
+}
+
+func (r *FollowerRepository) Unfollow(ctx context.Context, followerID, followeeID string) error {
+	// zaštita od self-unfollow; može i u servisu ako hoćeš
+	if followerID == followeeID {
+		return errors.New("cannot unfollow self")
+	}
+
+	ses := r.driver.NewSession(ctx, neo4j.SessionConfig{AccessMode: neo4j.AccessModeWrite})
+	defer ses.Close(ctx)
+
+	_, err := ses.ExecuteWrite(ctx, func(tx neo4j.ManagedTransaction) (any, error) {
+		// ako nema takve relacije, deleted=0
+		res, err := tx.Run(ctx, `
+			MATCH (:User {id:$followerID})-[r:FOLLOWS]->(:User {id:$followeeID})
+			DELETE r
+			RETURN COUNT(r) AS deleted
+		`, map[string]any{
+			"followerID": followerID,
+			"followeeID": followeeID,
+		})
+		if err != nil {
+			return nil, err
+		}
+		rec, err := res.Single(ctx)
+		if err != nil {
+			return nil, err
+		}
+		deleted, _ := rec.Get("deleted")
+		if n, ok := deleted.(int64); !ok || n == 0 {
+			return nil, ErrNotFollowing
+		}
+		return nil, nil
+	})
+	return err
+}
+
+func (r *FollowerRepository) GetRecommendations(ctx context.Context, userID string, limit int) ([]model.Recommendation, error) {
+	if limit <= 0 {
+		limit = 10
+	}
+
+	ses := r.driver.NewSession(ctx, neo4j.SessionConfig{AccessMode: neo4j.AccessModeRead})
+	defer ses.Close(ctx)
+
+	recsAny, err := ses.ExecuteRead(ctx, func(tx neo4j.ManagedTransaction) (any, error) {
+		res, err := tx.Run(ctx, `
+            MATCH (me:User {id: $userId})-[:FOLLOWS]->(:User)-[:FOLLOWS]->(cand:User)
+            WHERE cand.id <> $userId
+              AND NOT (me)-[:FOLLOWS]->(cand)
+            WITH cand, count(*) AS mutual
+            RETURN cand.id AS user_id, mutual
+            ORDER BY mutual DESC
+            LIMIT $limit
+        `, map[string]any{"userId": userID, "limit": limit})
+		if err != nil {
+			return nil, err
+		}
+
+		out := make([]model.Recommendation, 0)
+		for res.Next(ctx) {
+			rec := res.Record()
+			id, _ := rec.Get("user_id")
+			mutual, _ := rec.Get("mutual")
+			out = append(out, model.Recommendation{
+				UserID: id.(string),
+				Mutual: mutual.(int64),
+			})
+		}
+		return out, res.Err()
+	})
+	if err != nil {
+		return nil, err
+	}
+	return recsAny.([]model.Recommendation), nil
+}
+
+func (r *FollowerRepository) GetFollowees(ctx context.Context, userID string, skip, limit int) ([]string, error) {
+	if limit <= 0 {
+		limit = 20
+	}
+	if skip < 0 {
+		skip = 0
+	}
+
+	ses := r.driver.NewSession(ctx, neo4j.SessionConfig{AccessMode: neo4j.AccessModeRead})
+	defer ses.Close(ctx)
+
+	resAny, err := ses.ExecuteRead(ctx, func(tx neo4j.ManagedTransaction) (any, error) {
+		res, err := tx.Run(ctx, `
+			MATCH (:User {id:$userId})-[:FOLLOWS]->(f:User)
+			RETURN f.id AS id
+			ORDER BY id
+			SKIP $skip LIMIT $limit
+		`, map[string]any{
+			"userId": userID,
+			"skip":   skip,
+			"limit":  limit,
+		})
+		if err != nil {
+			return nil, err
+		}
+
+		out := make([]string, 0)
+		for res.Next(ctx) {
+			idVal, _ := res.Record().Get("id")
+			out = append(out, idVal.(string))
+		}
+		return out, res.Err()
+	})
+	if err != nil {
+		return nil, err
+	}
+	return resAny.([]string), nil
 }
 
 /* — Slede metode koje ćemo dodati kasnije —

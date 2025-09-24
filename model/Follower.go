@@ -9,3 +9,8 @@ type Follow struct {
 	FollowerID string    `json:"followerId"`
 	FolloweeID string    `json:"followeeId"`
 }
+
+type Recommendation struct {
+	UserID string
+	Mutual int64
+}
